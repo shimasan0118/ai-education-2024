@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ダイナソーダッシュ!!</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="assets/vendor.js"></script>
+</head>
+<body>
+  <header>
+    <h1 style="font-size: 30px;">ダイナソーダッシュ!!</h1>
+    <p>迫り来る障害物を避けて、高得点を目指せ！</p>
+  </header>
+
+  <section class="image-classification">
+    <h2>画像認識モデルセットアップ</h2>
+    <p id="status">画像認識モデルをロードしています</p>
+    <div class="camera-setup">
+      <video id="webcam" autoplay muted></video>
+      <button id="enableCam">Webカメラを有効</button>
+    </div>
+    <div class="data-collection-and-train">
+      <button class="dataCollector" data-1hot="0" data-name="Class 1">ジャンプしない時</button>
+      <button class="dataCollector" data-1hot="1" data-name="Class 2">ジャンプする時</button>  
+      <button id="train">学習と予測を開始</button>
+      <button id="reset">リセット</button>
+    </div>        
+  </section>
+
+  <section class="game-section">
+    <h2>ゲーム画面</h2>
+    <div class="game">
+      <button id="start">スタート</button>  
+      <div class="generation"></div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js" type="text/javascript"></script>    
+  <script src="assets/nn.js"></script>
+</body>
+</html>
