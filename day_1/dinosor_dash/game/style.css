@@ -73,6 +73,13 @@ button:hover {
   background-color: lighten(#2096ba, 20%);
 }
 
+.button-container {
+  display: flex; /* フレックスボックスを有効にする */
+  justify-content: center; /* 中央揃え */
+  align-items: center; /* アイテムを垂直方向に中央揃え */
+  gap: 10px; /* ボタン間の間隔 */
+}
+
 .video {
   width: 100%;
   max-width: 640px;

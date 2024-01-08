@@ -2,12 +2,13 @@ import constants from "./constants";
 
 import { pipeline, env, RawImage } from "@xenova/transformers";
 
-env.localModelPath = './custom_models';
+// env.localModelPath = './custom_models';
 
 // Disable local models
-env.allowRemoteModels = false;
+env.allowLocalModels = false;
 
-env.allowLocalModels = true;
+// env.allowRemoteModels = false;
+// env.allowLocalModels = true;
 
 // Define model factories
 // Ensures only one model is created of each type
@@ -65,7 +66,8 @@ self.addEventListener("message", async (event) => {
 
 class ImageClassificationPipelineSingleton extends Singleton {
     static task = "image-classification";
-    static model = "draw_model/quickdraw-mobilevit-small";
+    // "draw_model/quickdraw-mobilevit-small";
+    static model = `Xenova/${constants.DEFAULT_MODEL}`;
     static quantized = constants.DEFAULT_QUANTIZED;
 }
 

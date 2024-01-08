@@ -138,6 +138,10 @@ export default class Runner {
     this.containerEl.className = Runner.classes.CONTAINER;
     this.containerEl.style.width = `${this.dimensions.WIDTH}px`;
 
+    this.restartButton = document.getElementById('restartButton');
+    this.restartButton.addEventListener('click', this.handleRestart.bind(this));
+
+
     // Player canvas container.
     this.canvas = createCanvas(
       this.containerEl,
@@ -258,6 +262,10 @@ export default class Runner {
     );
   }
 
+  handleRestart() {
+    this.restart();
+  }    
+
   /**
    * Update the game frame and schedules the next one.
    */
@@ -322,7 +330,7 @@ export default class Runner {
     if (lives > 0) {
       this.generationEl.innerText = `GENERATION #${Runner.generation} | LIVE x ${this.tRexGroup.lives()}`;
     } else {
-      this.generationEl.innerHTML = `<div style="color: red;">GENERATION #${Runner.generation}  |  GAME OVER </div> <div style="color: blue;">'s'キーを押すとリスタートします</div>`;
+      this.generationEl.innerHTML = `<div style="color: red;">GENERATION #${Runner.generation}  |  GAME OVER </div>`;
     }
   }
 

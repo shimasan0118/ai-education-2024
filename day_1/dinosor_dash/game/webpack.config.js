@@ -1,9 +1,10 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const ASSETS_SOURCE_PATH = path.resolve('./src');
-const ASSETS_BUILD_PATH = path.resolve('./assets');
-const ASSETS_PUBLIC_PATH = '/assets';
+const ASSETS_BUILD_PATH = path.resolve('./dist'); 
+const ASSETS_PUBLIC_PATH = '/';
 
 module.exports = {
   context: ASSETS_SOURCE_PATH,
@@ -49,7 +50,13 @@ module.exports = {
       }
     ]
   },
-  plugins: [new CleanWebpackPlugin([ASSETS_BUILD_PATH], { verbose: false })],
+  plugins: [
+      new CleanWebpackPlugin([ASSETS_BUILD_PATH], { verbose: false }),
+      new HtmlWebpackPlugin({ // HtmlWebpackPlugin の設定を追加
+        template: path.resolve(__dirname, './index.html'), // ソースディレクトリの index.html のパス
+        filename: 'index.html', // 出力されるファイル名
+      }),      
+  ],
   optimization: {
     splitChunks: {
       cacheGroups: {
