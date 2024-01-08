@@ -63,9 +63,8 @@ model.compile({
 async function loadMobileNetFeatureModel() {
   const URL =
     'https://tfhub.dev/google/tfjs-model/imagenet/mobilenet_v3_small_100_224/feature_vector/5/default/1';
-  console.log("hoge")
   mobilenet = await tf.loadGraphModel(URL, {fromTFHub: true});
-  STATUS.innerText = '学習モデルの読み込みに成功しました';
+  STATUS.innerText = 'AIの読み込みに成功しました';
 
   // Warm up the model by passing zeros through it once.
   tf.tidy(() => {
@@ -101,6 +100,7 @@ function enableCam() {
 }
 
 async function trainAndPredict() {
+  STATUS.innerText = 'AIの学習中...';
   predict = false;
   tf.util.shuffleCombo(trainingDataInputs, trainingDataOutputs);
   const outputsAsTensor = tf.tensor1d(trainingDataOutputs, 'int32');
@@ -132,7 +132,7 @@ function predictLoop() {
       const highestIndex = prediction.argMax().arraySync();
       const predictionArray = prediction.arraySync();
 
-      STATUS.innerText = `Prediction: ${CLASS_NAMES[highestIndex]} with ${Math.floor(predictionArray[highestIndex] * 100)}% confidence`;
+      STATUS.innerText = `予測: ${CLASS_NAMES[highestIndex]} 確率: ${Math.floor(predictionArray[highestIndex] * 100)}%`;
 
     });
 
@@ -153,7 +153,7 @@ function reset() {
   }
   trainingDataInputs.length = 0;
   trainingDataOutputs.length = 0;
-  STATUS.innerText = 'No data collected';
+  STATUS.innerText = 'リセットしました';
 
   console.log(`Tensors in memory: ${tf.memory().numTensors}`);
 }
@@ -187,7 +187,7 @@ function dataGatherLoop() {
 
     STATUS.innerText = '';
     for (let n = 0; n < CLASS_NAMES.length; n += 1) {
-      STATUS.innerText += `${CLASS_NAMES[n]} data count: ${examplesCount[n]}. `;
+      STATUS.innerText += `${CLASS_NAMES[n]}時のデータ ${examplesCount[n]} 枚  `;
     }
     window.requestAnimationFrame(dataGatherLoop);
   }

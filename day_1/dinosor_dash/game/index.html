@@ -15,15 +15,15 @@
   </header>
 
   <section class="image-classification">
-    <h2>画像認識モデルセットアップ</h2>
-    <p id="status">画像認識モデルをロードしています</p>
+    <h2>画像認識AIの学習</h2>
+    <p id="status">画像認識AIをロードしています</p>
     <div class="camera-setup">
       <video id="webcam" autoplay muted></video>
       <button id="enableCam">Webカメラを有効</button>
     </div>
     <div class="data-collection-and-train">
-      <button class="dataCollector" data-1hot="0" data-name="Class 1">ジャンプしない時</button>
-      <button class="dataCollector" data-1hot="1" data-name="Class 2">ジャンプする時</button>  
+      <button class="dataCollector" data-1hot="0" data-name="ジャンプしない">ジャンプしない時</button>
+      <button class="dataCollector" data-1hot="1" data-name="ジャンプする">ジャンプする時</button>  
       <button id="train">学習と予測を開始</button>
       <button id="reset">リセット</button>
     </div>        
@@ -32,7 +32,10 @@
   <section class="game-section">
     <h2>ゲーム画面</h2>
     <div class="game">
-      <button id="start">スタート</button>  
+      <div class="button-container">
+        <button id="start">スタート</button>
+        <button id="restartButton">リスタート</button>
+      </div>
       <div class="generation"></div>
     </div>
   </section>
