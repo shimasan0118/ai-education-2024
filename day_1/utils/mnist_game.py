@@ -3,6 +3,11 @@ import random
 import cv2
 import numpy as np
 import time
+import sys
+
+sys.path.append('..')
+
+from utils import db_utils
 
 
 class HandwritingGame:
@@ -17,6 +22,8 @@ class HandwritingGame:
         self.selected_label = -1
         self.question_num = 0
         self.model = model
+
+        self.du = db_utils.DbUtils('aws')
 
     def get_score(self, user_info):
         return int(user_info.split('スコア: ')[-1])
@@ -33,12 +40,17 @@ class HandwritingGame:
 
     def end_game(self, reset):
         user_info = f' ユーザー名: {self.name}  正解数: {self.correct_count}/{self.question_num}  スコア: {self.score}'
+
+        # dbにスコアを登録
+        self.du.regist_score('draw-number-score', self.name, self.score)
+
         self.reset_game()
         if reset:
             return 'リセットしました。', None
-        self.score_info_list.append(user_info)
-        self.score_info_list.sort(key=self.get_score, reverse=True)
-        ranking_info = [f'{rank + 1}位  {info}' for rank, info in enumerate(self.score_info_list)]
+
+        ranking_data = self.du.get_top_n_player('draw-number-score')
+        ranking_info = [f'{i + 1}位  {data[1]} スコア:{int(data[2])}' for i, data in enumerate(ranking_data)]
+
         return f"ゲーム終了\n" + user_info, '\n'.join(ranking_info)
 
     def reset_game(self):
@@ -58,7 +70,7 @@ class HandwritingGame:
         self.selected_label = label_choice
         message = f"{self.question_num}問目: 数字の「{self.selected_label}」を描いてください。"
         if self.question_num == 1:
-            self.end_time = time.time() + 60  # 1分間のゲーム時間
+            self.end_time = time.time() + 15  # 1分間のゲーム時間
         ranking_info = [f'{i + 1}位  {info}' for i, info in enumerate(self.score_info_list)]
         return message, '\n'.join(ranking_info)
 
