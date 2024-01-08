@@ -70,7 +70,7 @@ class HandwritingGame:
         self.selected_label = label_choice
         message = f"{self.question_num}問目: 数字の「{self.selected_label}」を描いてください。"
         if self.question_num == 1:
-            self.end_time = time.time() + 15  # 1分間のゲーム時間
+            self.end_time = time.time() + 60  # 1分間のゲーム時間
         ranking_info = [f'{i + 1}位  {info}' for i, info in enumerate(self.score_info_list)]
         return message, '\n'.join(ranking_info)
 
