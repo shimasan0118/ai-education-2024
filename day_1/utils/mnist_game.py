@@ -33,7 +33,7 @@ class HandwritingGame:
             self.name = input_name
         if self.name == '':
             ranking_info = [f'{i + 1}位  {info}' for i, info in enumerate(self.score_info_list)]
-            return "ユーザー名を入力してください。", '\n'.join(ranking_info)
+            return "「ユーザー名」に名前を入力してから「ゲーム開始」ボタンを押してください。", '\n'.join(ranking_info)
         if time.time() > self.end_time or reset:
             return self.end_game(reset)
         return self.next_question()
@@ -68,7 +68,7 @@ class HandwritingGame:
                 break
         self.question_num += 1
         self.selected_label = label_choice
-        message = f"{self.question_num}問目: 数字の「{self.selected_label}」を描いてください。"
+        message = f"{self.question_num}問目: 「スケッチ」に「{self.selected_label}」を描いてください。"
         if self.question_num == 1:
             self.end_time = time.time() + 60  # 1分間のゲーム時間
         ranking_info = [f'{i + 1}位  {info}' for i, info in enumerate(self.score_info_list)]

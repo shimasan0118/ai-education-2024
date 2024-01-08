@@ -15,17 +15,15 @@ import time
 from IPython.display import display, HTML, clear_output
 
 
-layers_choices = ['Conv2D', 'MaxPooling2D', 'Flatten', 'Dense']
+layers_choices = ['Dense', 'Flatten']
 
 # 各レイヤーに関する質問
 questions = [
-    "画像から特徴を抽出したいときに使用するレイヤーは？",
-    "画像のサイズを小さくして、重要な特徴を保持したい時に使用するレイヤーは？",
-    "2Dの特徴マップを1Dのベクトルに変換するレイヤーは？",
-    "特定の数のニューロンを持つ通常のニューラルネットワークレイヤーは？"
+    "画像を縦横から横一列に変換するレイヤーは？",
+    "特定の数のニューロン同士を全部繋げたレイヤーは？"
 ]
 
-correct_answers = ['Conv2D', 'MaxPooling2D', 'Flatten', 'Dense']
+correct_answers = ['Flatten', 'Dense']
 
 
 # 画像をBase64エンコードされた文字列に変換する関数
@@ -135,16 +133,16 @@ class MnistModel:
 
         # データフレームを作成
         df = pd.DataFrame({
-            'Image': [image_to_base64(img) for img in sample_images]
+            '画像': [image_to_base64(img) for img in sample_images]
         })
 
         # ワンホットエンコーディングされたラベルを列に追加
         for i in range(10):
-            df[f'label_{i}'] = sample_labels_one_hot[:, i].astype(int)
+            df[f'ラベル_{i}'] = sample_labels_one_hot[:, i].astype(int)
 
         # DataFrameをHTMLとして表示する関数
         def display_df_with_images(df):
-            format_dict = {'Image': lambda x: '<img src="data:image/png;base64,{}" style="width: 28px; height: 28px;">'.format(x)}
+            format_dict = {'画像': lambda x: '<img src="data:image/png;base64,{}" style="width: 28px; height: 28px;">'.format(x)}
             return HTML(df.to_html(escape=False, formatters=format_dict))
 
         # DataFrameを表示
@@ -171,13 +169,10 @@ class MnistModel:
         self.model = tf.keras.models.Sequential()
         for i, question in enumerate(questions):
             ask_question(question, layers_choices, correct_answers[i])
-            if correct_answers[i] == 'Conv2D':
+            if correct_answers[i] == 'Flatten':
                 self.model.add(tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(28, 28, 1)))
-                # 2つ目のConv2D層も追加
                 self.model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
-            elif correct_answers[i] == 'MaxPooling2D':
                 self.model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
-            elif correct_answers[i] == 'Flatten':
                 # Flatten層の前にDropout層を追加
                 self.model.add(tf.keras.layers.Dropout(0.25))
                 self.model.add(tf.keras.layers.Flatten())

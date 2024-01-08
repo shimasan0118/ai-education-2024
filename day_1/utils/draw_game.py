@@ -41,7 +41,7 @@ class DrawGame:
             self.name = input_name
         if self.name == '':
             ranking_info = [f'{i + 1}位  {info}' for i, info in enumerate(self.score_info_list)]
-            return "ユーザー名を入力してください。", '\n'.join(ranking_info)
+            return "「ユーザー名」に名前を入力してから「ゲーム開始」ボタンを押してください。", '\n'.join(ranking_info)
         if time.time() > self.end_time or reset:
             return self.end_game(reset)
         return self.next_question()
@@ -76,7 +76,7 @@ class DrawGame:
                 break
         self.question_num += 1
         self.selected_label = label_choice
-        message = f"{self.question_num}問目: {self.labels[self.selected_label]}を描いてください。"
+        message = f"{self.question_num}問目: 「スケッチ」に「{self.labels[self.selected_label]}」を描いてください。"
         if self.question_num == 1:
             self.end_time = time.time() + 180  # 3分間のゲーム時間
         ranking_info = [f'{i + 1}位  {info}' for i, info in enumerate(self.score_info_list)]
@@ -85,6 +85,9 @@ class DrawGame:
     def recognize_drawing(self, desp, result, draw_image):
         if self.selected_label == -1:
             return "ユーザー名を入力してゲーム開始ボタンを押してください", result, None, None, None
+        if draw_image is None:
+            self.next_question()
+            return f"{self.question_num}問目: 「スケッチ」に「{self.labels[self.selected_label]}」を描いてください。", result, None, None, None
         draw_image = cv2.resize(draw_image, (28, 28))        
         draw_image = draw_image / 255.0
         draw_image = draw_image.reshape(1, 28, 28)
