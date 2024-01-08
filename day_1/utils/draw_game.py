@@ -6,6 +6,11 @@ import time
 import torch
 import onnxruntime
 from utils.draw_game_labels import get_label_list
+import sys
+
+sys.path.append('..')
+
+from utils import db_utils
 
 
 def softmax(x):
@@ -26,6 +31,8 @@ class DrawGame:
         self.question_num = 0
         self.model = model
 
+        self.du = db_utils.DbUtils('aws')
+
     def get_score(self, user_info):
         return int(user_info.split('スコア: ')[-1])
 
@@ -41,12 +48,17 @@ class DrawGame:
 
     def end_game(self, reset):
         user_info = f' ユーザー名: {self.name}  正解数: {self.correct_count}/{self.question_num}  スコア: {self.score}'
+
+        # dbにスコアを登録
+        self.du.regist_score('draw-picture-score', self.name, self.score)
+
         self.reset_game()
         if reset:
             return 'リセットしました。', None
-        self.score_info_list.append(user_info)
-        self.score_info_list.sort(key=self.get_score, reverse=True)
-        ranking_info = [f'{rank + 1}位  {info}' for rank, info in enumerate(self.score_info_list)]
+
+        ranking_data = self.du.get_top_n_player('draw-picture-score')
+        ranking_info = [f'{i + 1}位  {data[1]} スコア:{int(data[2])}' for i, data in enumerate(ranking_data)]
+
         return f"ゲーム終了\n" + user_info, '\n'.join(ranking_info)
 
     def reset_game(self):
