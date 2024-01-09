@@ -1,0 +1,22 @@
+runtime: nodejs14  # Node.jsのバージョンを指定
+env: standard      # 環境を標準環境に設定
+service: ai-education-speed-sketch-dash
+
+handlers:
+# 静的アセット（CSS, JS, 画像ファイルなど）
+- url: /(.*\.(css|js|jpg|png|gif|ico|json))
+  static_files: dist/\1
+  upload: dist/.*\.(css|js|jpg|png|gif|ico|json)
+
+# HTMLファイル
+- url: /.*
+  static_files: dist/index.html
+  upload: dist/index.html
+  
+  
+# 自動スケーリングの設定
+automatic_scaling:
+  min_idle_instances: automatic  # 最小アイドルインスタンス数
+  max_idle_instances: automatic  # 最大アイドルインスタンス数
+  min_pending_latency: automatic # 最小待機遅延
+  max_pending_latency: automatic # 最大待機遅延
