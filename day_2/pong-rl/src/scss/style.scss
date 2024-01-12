@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css?family=Play:400,700');
+
+// Set your brand colors
+$black: #3a3c3f;
+$white: #e5e5e6;
+$blue: #2ec0f9;
+$red: #f06543;
+$yellow: #e7e247;
+$green: #c5d86d;
+
+$grey-darker: mix($white, $black, 21%);
+$grey-dark: mix($white, $black, 29%);
+$grey: mix($white, $black, 48%);
+$grey-light: mix($white, $black, 71%);
+$grey-lighter: mix($white, $black, 86%);
+
+// Update Bulma's variables
+$family-sans-serif: 'Play', sans-serif;
+$primary: $red;
+$background: $black;
+$text: $white;
+$info: $blue;
+$link: $red;
+$link-hover: darken($red, 10%);
+$link-focus: darken($red, 10%);
+$link-active: darken($red, 10%);
+$title-color: $white;
+$title-weight: 400;
+$input-hover-color: darken($red, 10%);
+
+// Import the rest of Bulma
+@import 'node_modules/bulma/bulma.sass';
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: $black;
+  margin: 0;
+  padding: 0;
+  color: $white;
+  overflow: hidden;
+}
+
+#title {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#footer {
+  font-size: 20pt;
+  color: $grey-lighter;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+#gameCanvas {
+  border: 1px $white solid;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.section {
+  padding: 1rem 0.5rem;
+
+  @media (min-width: $tablet) {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.container {
+  max-width: 640px;
+}
+
+#menu.section {
+  font-size: 18pt;
+  padding: 1rem;
+
+  @media (min-width: $tablet) {
+    font-size: 20pt;
+    padding: 3rem;
+  }
+}
+
+#stats {
+  font-size: 18pt;
+
+  @media (min-width: $tablet) {
+    font-size: 20pt;
+  }
+}
+
+.animated.section {
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s all ease;
+
+  &.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.github-corner {
+  svg {
+    fill: $red;
+    color: $black;
+    position: absolute;
+    top: 0;
+    border: 0;
+    right: 0;
+  }
+
+  &:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+
+  @media (max-width: 500px) {
+    &:hover .octo-arm {
+      animation: none;
+    }
+
+    .octo-arm {
+      animation: octocat-wave 560ms ease-in-out;
+    }
+  }
+
+  @keyframes octocat-wave {
+    0%,
+    100% {
+      transform: rotate(0);
+    }
+
+    20%,
+    60% {
+      transform: rotate(-25deg);
+    }
+
+    40%,
+    80% {
+      transform: rotate(10deg);
+    }
+  }
+}
