@@ -36,7 +36,9 @@ export default class Match {
       
     // プレイヤー名を初期化
     this.playerAName = 'Player A';
-    this.playerBName = 'Player B';      
+    this.playerBName = 'Player B';
+    
+    this.username = options.username;
 
     // How much time has passed at each update. Fixed so we get same results
     // on every machine.

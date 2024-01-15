@@ -16,6 +16,14 @@ const controllers = {
   KeyController,
 };
 
+// const mysql = require('mysql');
+// const connection = mysql.createConnection({
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_NAME,
+//   socketPath: `/cloudsql/${process.env.INSTANCE_CONNECTION_NAME}`
+// });
+
 $(document).ready(async () => {
   Menu.init(controllers);
   const matchOptions = await Menu.run();
@@ -57,7 +65,7 @@ function startBattle() {
     currentMatch.leftController = new KeyController('left');
 
     // プレイヤー名を更新
-    currentMatch.playerAName = 'USER';
+    currentMatch.playerAName = currentMatch.username || 'USER';
     currentMatch.playerBName = 'AI';      
 
     // 点数リセット
@@ -74,6 +82,15 @@ function startBattle() {
     currentMatch.onEnd(() => {
       currentMatch.leftController = originalLeftController;
       currentMatch.BattleMode = false;
+      
+      // connection.query(
+      //   'insert into pong-score (player_name, score) values(currentMatch.username, currentMatch.stats.stats.match)',
+      //   (error, results) => {
+      //   if (error) throw error;
+      //   console.log(results);
+      // });
+
+      console.log({ "試合終了時のマッチ数": currentMatch.stats.stats.match});
     });
   }
 }
