@@ -5,7 +5,7 @@ import numpy as np
 import time
 import torch
 import onnxruntime
-from utils.draw_game_labels import get_label_list
+from utils.draw_game_labels import get_label_list, LABELS
 import sys
 
 sys.path.append('..')
@@ -94,20 +94,26 @@ class DrawGame:
         draw_image = np.array(draw_image)
         draw_image = torch.from_numpy(draw_image.astype(np.float32)).clone()
         draw_image = np.expand_dims(np.array(draw_image), 0)
-        predicted_prob = self.model.run(["logits"], {"pixel_values": draw_image})
-        predicted_prob = softmax(predicted_prob[0][0])
+        predicted_prob = self.model.run(["logits"], {"pixel_values": draw_image})[0][0]
+        predicted_prob = [
+           res if i in [int(l) for l in LABELS.keys()] else 0
+        for i, res in enumerate(predicted_prob)
+        ]
+
+        predicted_prob = softmax(predicted_prob)
         preds = np.argsort(predicted_prob)[::-1].tolist()
-        predicted_label = preds[0]
-        prob_dict = {self.labels[pred]: predicted_prob.tolist()[pred] for pred in preds}
+
+        predicted_label = [pred for pred in preds if str(pred) in LABELS.keys()][0]
+        prob_dict = {LABELS[str(pred)]: predicted_prob.tolist()[pred] for pred in preds if str(pred) in LABELS.keys()}
         return self.evaluate_prediction(desp, predicted_label, prob_dict)
 
     def evaluate_prediction(self, desp, predicted_label, prob_dict):
         current_score = int(prob_dict[self.labels[self.selected_label]] * 100)
         self.score += current_score
-        if int(predicted_label) == int(self.selected_label):
+        if self.labels[self.selected_label] == LABELS[str(predicted_label)]:
             self.correct_count += 1
             self.score_history += f"{self.question_num}問目: ○  スコア:{current_score}\n"
             return desp, f"{self.question_num:2d}問目: 正解！  スコア:{current_score}\n", prob_dict, None, self.score_history
         else:
             self.score_history += f"{self.question_num}問目: ×  スコア:{current_score}\n"
-            return desp, f"{self.question_num:2d}問目: 不正解 正解は「{self.labels[self.selected_label]}」で認識したものは「{self.labels[predicted_label]}」でした。", prob_dict, None, self.score_history
+            return desp, f"{self.question_num:2d}問目: 不正解 正解は「{self.labels[self.selected_label]}」で認識したものは「{LABELS[str(predicted_label)]}」でした。", prob_dict, None, self.score_history
