@@ -10,6 +10,7 @@ export default {
     this.$selfPlay = $('#selfPlayDropdown');
     this.$difficulty = $('#difficultyDropdown');
     this.controllers = controllers;
+    this.$username = $('#usernameInput');
 
     // Load player menu entries:
     Object.keys(this.controllers).forEach((controller, i) => {
@@ -47,6 +48,11 @@ export default {
     });
   },
 
+  // Returns the entered username.
+  getUsername() {
+    return this.$username.val();
+  },
+
   // Returns the controller class selected for player a.
   getPlayerA() {
     const selected = this.$playerA.find(':selected').text();
@@ -81,6 +87,7 @@ export default {
       $('#playButton').click(event => {
         $('#menu').removeClass('active');
 
+        const username = this.getUsername();
         const leftControllerClass = this.getPlayerA();
         const rightControllerClass = this.getPlayerB();
         const difficulty = this.getDifficulty();
@@ -89,6 +96,8 @@ export default {
           ...Match.createOptions(difficulty),
           leftController: new leftControllerClass('left'),
         };
+
+        matchOptions.username = username
 
         if (rightControllerClass) matchOptions.rightController = new rightControllerClass('right');
         else matchOptions.rightController = matchOptions.leftController.mirrorController();
