@@ -4,6 +4,14 @@ import pandas as pd
 from matplotlib import animation, rc
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import japanize_matplotlib
+import sys
+
+sys.path.append('..')
+
+from utils import db_utils
+
+DU = db_utils.DbUtils('aws')
+
 
 class Obstacle:
     def __init__(self, x, y, width, height):
@@ -239,11 +247,18 @@ def update_result(state, user_name, scoreboard):
     time_score = 100 - (environment.frame_count // 50) * 3
     obst_score = (len(environment.obstacles) + 1) * 100
     score = time_score + obst_score if environment.success else 0
+
+    # dbにスコアを登録
+    DU.regist_score('rl-score', user_name, score, len(environment.obstacles))
+
     result_text = "成功です！" if environment.success else "失敗です"
+
     result_text += f"  障害物: {len(environment.obstacles)}個,  経過時間: {environment.frame_count/10},  スコア: {score}点"
-    if scoreboard != '':
-        scoreboard += "\n"
-    scoreboard += f"  ユーザー名: {user_name},  障害物: {len(environment.obstacles)}個, スコア: {score}点"
+
+    ranking_data = DU.get_top_n_player('rl-score')
+    scoreboard = ''
+    for data in ranking_data:
+        scoreboard += f"  ユーザー名: {data[1]},  障害物: {data[4]}個, スコア: {data[2]}点\n"
     return result_text, scoreboard, environment.update_text
 
 
