@@ -23,7 +23,7 @@ export default class Match {
       ballSpeedMax: 2,
 
       // How strongly the image is downscaled for visual controllers
-      visualDownscalingFactor: 10,
+      visualDownscalingFactor: 10,     
 
       ...options,
     };
@@ -35,8 +35,14 @@ export default class Match {
     this.ctx = this.canvas.getContext('2d');
       
     // プレイヤー名を初期化
-    this.playerAName = 'Player A';
-    this.playerBName = 'Player B';      
+    this.playerAName = 'CPU';
+    this.playerBName = '';      
+      
+    // オプションから試合数を取得
+    this.matchCount = options.matchCount || 0;
+      
+    // AIとのバトルが開始されたかどうかを追跡するフラグ
+    this.startedAIBattle = false;            
 
     // How much time has passed at each update. Fixed so we get same results
     // on every machine.
@@ -160,6 +166,39 @@ export default class Match {
 
     return data;
   }
+    
+  startAIBattle() {
+    this.startedAIBattle = true;
+  }  
+    
+  updateEnemyName() {         
+    if (this.matchCount <= 50) {
+      this.playerBName = 'スライム';
+    } else if (this.matchCount <= 100) {
+      this.playerBName = 'スカル';
+    } else if (this.matchCount <= 150) {
+      this.playerBName = 'ゴブリン';
+    } else if (this.matchCount <= 200) {
+      this.playerBName = 'ドラゴン';        
+    } else {
+      this.playerBName = 'デビル';
+    }
+  }
+    
+  // 現在の敵キャラクターの名前を取得するメソッド
+  getCurrentEnemyName() {
+    if (this.matchCount <= 50) {
+      return 'スライム';
+    } else if (this.matchCount <= 100) {
+      return 'スカル';
+    } else if (this.matchCount <= 150) {
+      return 'ゴブリン';
+    } else if (this.matchCount <= 200) {
+      return 'ドラゴン';        
+    } else {
+      return 'デビル';
+    }
+  }    
 
   // バトル終了時のコールバック設定
   onEnd(callback) {
@@ -400,6 +439,28 @@ export default class Match {
     const y = obj.y * this.canvas.height - height / 2;
     this.ctx.fillRect(x, y, width, height);
   }
+    
+  // 討伐リストを更新するメソッド
+  updateDefeatList() {
+    let enemyId;
+    if (this.matchCount <= 50) {
+      enemyId = 'slime';        
+    } else if (this.matchCount <= 100) {
+      enemyId = 'skeleton';
+    } else if (this.matchCount <= 150) {
+      enemyId = 'goblin';
+    } else if (this.matchCount <= 200) {
+      enemyId = 'dragon';        
+    } else {
+      enemyId = 'devilMaster';
+    }
+
+    const enemyElement = document.getElementById(enemyId);
+    if (enemyElement) {
+      const enemyName = enemyElement.textContent.split(':')[0];
+      enemyElement.innerHTML = `${enemyName}: <span class="defeated">討伐！</span>`;
+    }
+  }    
 
   // Redraw the game based on the current state
   async draw() {
@@ -467,7 +528,7 @@ export default class Match {
   // Starts the game and runs until completion.
   async run() {
     let updateInProgress = false;
-
+      
     const updateFrequency = this.live ? this.updateFrequency : 1;
 
     return new Promise((resolve, reject) => {
@@ -501,7 +562,12 @@ export default class Match {
                 this.live && sleep(250),
                 this.leftController && this.leftController.onMatchEnd(this.winner === 'left'),
                 this.rightController && this.rightController.onMatchEnd(this.winner === 'right'),
-              ]).then(() => resolve(this.winner));
+              ]).then(() => {
+                // プレイヤーが勝利し、AIとのバトルが開始されていた場合に討伐リストを更新
+                if (this.winner === 'left' && this.startedAIBattle) {
+                  this.updateDefeatList();
+                }
+              resolve(this.winner);});
             }
           });
       }, updateFrequency);

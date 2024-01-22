@@ -16,6 +16,8 @@ const controllers = {
   KeyController,
 };
 
+let matchCount = 0;  // 試合数を追跡する変数
+
 $(document).ready(async () => {
   Menu.init(controllers);
   const matchOptions = await Menu.run();
@@ -33,15 +35,28 @@ $(document).ready(async () => {
   await sleep(500);
   $('#menu').remove();
   $('#game').addClass('active');
+  $('#defeatList').addClass('active');
 
   matchOptions.stats = new Stats();
 
   for (;;) {
+    matchCount++;      
     window.currentMatch = new Match({
       ...matchOptions,
       live: liveMode,
+      matchCount: matchCount,
     });
+      
+    // 敵キャラクターの名前を更新
+    window.currentMatch.updateEnemyName();
+      
+    // ボタンのテキストを更新
+    const enemyName = window.currentMatch.getCurrentEnemyName();
+    const battleButton = document.getElementById('startBattleButton');
+    battleButton.textContent = `${enemyName}とバトル`;      
+      
     await window.currentMatch.run();
+      
   }
 });
 
@@ -55,11 +70,13 @@ function startBattle() {
 
     // Player AをKeyControllerに切り替え
     currentMatch.leftController = new KeyController('left');
+      
+    currentMatch.startAIBattle();      
 
     // プレイヤー名を更新
-    currentMatch.playerAName = 'USER';
-    currentMatch.playerBName = 'AI';      
-
+    currentMatch.playerAName = '勇者';
+    // currentMatch.playerBName = 'AI';
+      
     // 点数リセット
     currentMatch.leftScore = 0;
     currentMatch.rightScore = 0;
