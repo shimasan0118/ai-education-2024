@@ -203,10 +203,10 @@ function getValidMoves(checkPass=true) {
                     .then(resultData => {
                         if (!gameIsOver){
                             if (resultData.result === "Black WIN!"){
-                                alert(`${resultData.diff}差で勇者の勝利です！`);
+                                alert(`${resultData.diff}石差で勇者の勝利です！`);
                             }
-                            if (resultData.result === "White WIN!"){
-                                alert(`${resultData.diff}差で敗北です...`);
+                            elif (resultData.result === "White WIN!"){
+                                alert(`${resultData.diff}石差で敗北です...`);
                             }
                             else{
                                 alert(`引き分けです`);
