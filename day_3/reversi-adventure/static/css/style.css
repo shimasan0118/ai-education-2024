@@ -1,0 +1,302 @@
+body {
+    font-family: 'DotGothic16', sans-serif; /* ゲーム風のフォント */    
+    background-color: #282c34; /* 暗い背景色 */
+    color: #fff; /* 白色のテキスト */
+    text-align: center; /* テキストを中央揃え */
+    padding: 20px;
+}
+
+/* オセロ盤を中央に配置するためのコンテナ */
+.board-container {
+    display: flex;
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: flex-end; /* 垂直方向の下部揃えに変更 */
+    margin: 40px auto 50px; /* 上部のマージンを増やし、下部のマージンを調整 */
+}
+
+
+/* オセロボードのスタイル */
+.board {
+    z-index: 100;
+    display: grid;
+    grid-template-columns: repeat(8, 50px);
+    grid-template-rows: repeat(8, 50px);
+    border: 3px solid #333;
+    background-color: #006400; /* 盤面の背景色 */
+    padding: 10px; /* 盤面の周りに少し余白を追加 */
+}
+
+/* 各セルのスタイル */
+.cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+/* 有効な手を示すスタイル */
+.cell.valid-move {
+    background-color: rgba(50, 205, 50, 0.5); /* 明るい緑色に透明度を加える */
+}
+
+.disc {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 0 2px #000;
+    background-color: black; /* 初期値 */
+}
+
+
+/* CPUが手を実行した石のスタイル */
+.disc.cpu-highlight {
+    border: 2px solid red; /* 赤い枠線を追加 */
+}
+
+/* 黒石のスタイル */
+.black {
+    background-color: black;
+}
+
+/* 白石のスタイル */
+.white {
+    background-color: white;
+}
+
+/* ゲームモード選択のスタイル */
+#gameModeSelection {
+    margin-bottom: 20px;
+}
+
+/* CPU選択のスタイル */
+#cpuSelection {
+    margin-bottom: 20px;
+}
+
+#backToMenuButton {
+    margin-top: 20px;
+    background-color: #ff4500;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 5px;
+}
+
+#backToMenuButton:hover {
+    background-color: #dc143c;
+}
+
+#secretToggle span {
+    margin-right: 10px;
+}
+
+h1 {
+    font-size: 50px;
+    margin-bottom: 70px;
+}
+
+button {
+    z-index: 100;
+    background-color: #ff4500; /* 明るい赤色 */
+    color: #fff;
+    border: none;
+    font-size: 17px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    font-family: inherit; /* ボタンも同じフォントを使用 */
+    border-radius: 5px;
+    position: relative;
+}
+
+button:hover {
+    background-color: #dc143c;
+}
+
+.button-cleared {
+    background-color: #808080;
+}
+
+.clear-badge {
+    display: none; /* 初期状態では非表示 */
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background-color: gold;
+    font-size: 12px;
+    padding: 3px;
+    font-weight: bold; /* 文字を太字にする */
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.clear-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 12px;
+    color: black;
+    padding: 3px;
+}
+
+/* トグルスイッチのラベルとコンテナ */
+#secretToggle {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    margin-bottom: 35px; /* トグルスイッチの下部の余白を設定 */
+    align-items: center; /* アイテムを上下中央揃え */
+    justify-content: center; /* アイテムを左右中央揃え */
+}
+
+#secretToggle > div {
+    display: flex;
+    align-items: center;
+}
+
+/* トグルスイッチのスタイル */
+.switch {
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    position: relative;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%; /* 丸形にする */    
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {;
+  transform: translateX(18px);
+}
+
+/* トグルスイッチの外観（丸形） */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* レコメンドされた手をハイライトするスタイル */
+.highlighted-move {
+    background-image: url('/static/img/ai2.png'); /* 画像のパスを指定 */
+    background-size: cover; /* 画像をセルに合わせて調整 */
+    background-position: center; /* 画像をセルの中央に配置 */
+}
+
+/* 画像コンテナのスタイル */
+#imageContainer {
+    text-align: center; /* 中央揃え */
+    position: fixed; /* 固定位置 */
+    left: 50%; /* 水平方向中央 */
+    bottom: 0; /* 画面の最下部に配置 */
+    transform: translateX(-50%); /* 中央揃えの調整 */
+    padding: 130px; /* 余白 */
+}
+/* 画像のスタイル */
+#menuImage {
+    max-width: 700px; /* 画像の最大幅 */
+    height: auto; /* 高さは自動調整 */
+}
+
+#characterContainer {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-between; /* 左右に均等に配置 */
+    align-items: flex-start; /* 上端に配置 */
+    align-items: center;
+    margin-top: 50px; /* 上側のマージンを設定 */
+}
+
+#yusyaImage{
+    width: 100px; /* 画像の幅 */
+    height: 100px; /* 画像の高さ */
+    object-fit: contain;
+}
+
+.slime {
+    width: 100px; /* 画像の幅 */
+    height: 100px; /* 画像の高さ */
+    object-fit: contain;
+    position: absolute; /* 絶対位置指定 */
+    left: calc(50% + 100px); /* 中央から少し右に配置 */  
+}
+
+.dragon {
+    width: 230px; /* 画像の幅 */
+    height: 230px; /* 画像の高さ */
+    object-fit: contain;
+    margin-top: -35px; /* 上側のマージンを設定 */
+    position: absolute; /* 絶対位置指定 */
+    left: calc(50% + 30px); /* 中央から少し右に配置 */    
+}
+
+
+#yusyaImage {
+    position: absolute; /* 絶対位置指定 */
+    left: calc(50% - 200px); /* 中央から少し左に配置 */
+}
+
+.maou {
+    width: 150px; /* 画像の幅 */
+    height: 225px; /* 画像の高さ */ 
+    object-fit: contain;
+    margin-top: -50px;
+    position: absolute; /* 絶対位置指定 */
+    left: calc(50% + 50px); /* 中央から少し右に配置 */        
+}
+
+/* 傾けるクラス */
+.rotate-45deg {
+    transform: rotate(45deg);
+}
+
+/* 傾けるクラス */
+.rotate-315deg {
+    transform: rotate(315deg);
+}
