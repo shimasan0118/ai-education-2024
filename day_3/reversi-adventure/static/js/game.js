@@ -205,7 +205,7 @@ function getValidMoves(checkPass=true) {
                             if (resultData.result === "Black WIN!"){
                                 alert(`${resultData.diff}石差で勇者の勝利です！`);
                             }
-                            elif (resultData.result === "White WIN!"){
+                            else if (resultData.result === "White WIN!"){
                                 alert(`${resultData.diff}石差で敗北です...`);
                             }
                             else{
