@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="jp" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="transparent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-status-bar-style" content="transparent" />
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <title>Passion War</title>
+  </head>
+  <body>
+    <div class="content">
+
+      <div class="step step-01">
+        <h1>
+          <img src="/images/passion-war.png" alt="logo">
+        </h1>
+        <div class="waiting-players">
+          <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+          </div>
+          <span>対戦相手を待っています...</span>
+        </div>
+        <div class="room-link">
+          <div class="link"></div>
+          <span class="description">友達にURLを共有してバトルを開始しよう</span>
+        </div>
+      </div><!-- step-01 end -->
+
+      <div class="step step-02">
+        <div class="video-feed">
+          <div class="frame"></div>
+
+          <div class="inner">
+            <div class="remote-frame">
+              <video id="webcam" autoplay playsinline muted width="48" height="48"></video>
+            </div>
+            <video id="remoteVideo" autoplay></video>
+          </div>
+
+          <div class="current-emotion">
+            <img class="icon" src="/images/emotion-random.png" alt="emotion icon">
+          </div>
+
+        </div><!-- video-feed end -->
+
+        <div class="feed-info">
+          <div class="jauge">
+            <div class="bg"></div>
+            <div class="level"></div>
+          </div>
+        </div>
+
+        <div class="bu-ready"></div>
+
+        <div class="timer">
+          <span class="seconds">5</span>
+        </div>
+
+        <div class="scores-result">
+          <img src="/images/lose-message.png" alt="game result">
+          <div class="bu-play-again"></div>
+        </div>
+
+        <div class="scores">
+          <div class="me">
+            <div class="level"></div>
+            <div class="label">0</div>
+          </div>
+          <div class="opponent">
+            <div class="level"></div>
+            <div class="label">0</div>
+            <img class="vs" src="/images/score-ad-jauge-vs.png" alt="vs icon">
+          </div>
+        </div>
+      </div><!-- step-02 end -->
+    </div><!-- content end -->
+  </body>
+</html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+<script src="js/webcam.js"></script>
+<script src="js/web-rtc-utils.js"></script>
+<script src="js/index.js"></script>
