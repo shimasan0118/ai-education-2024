@@ -1,0 +1,26 @@
+runtime: custom  # 使用するPythonのバージョンを指定します。
+
+env: flex  # フレキシブル環境を指定します。
+
+# リソースの設定
+resources:
+  cpu: 2
+  memory_gb: 8
+  disk_size_gb: 10
+
+service: ai-education-reversi
+# [START handlers]
+handlers:
+- url: /static
+  static_dir: static
+- url: /.*
+  script: auto
+# [END handlers]
+
+# 自動スケーリングの設定（オプション）
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 5
+  cool_down_period_sec: 60
+  cpu_utilization:
+    target_utilization: 0.5

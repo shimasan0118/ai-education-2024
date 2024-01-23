@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+　　　　　<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/style.css">
+        <title>リバーシアドベンチャー</title>
+    </head>
+    <body>
+        <div id="menu">
+            <h1>リバーシアドベンチャー</h1>
+
+            <div id="gameModeSelection">
+                <button id="playerVsPlayerButton">人と対戦する</button>
+                <button id="dungeonButton">ダンジョンに潜る</button>
+            </div>
+
+            <div id="cpuSelection" style="display: none;">
+                <button id="vsSlimeButton">vs スライム<span class="clear-badge">CLEAR</span></button>
+                <button id="vsDragonButton">vs ドラゴン<span class="clear-badge">CLEAR</span></button>
+                <button id="vsMaouButton">vs 魔王<span class="clear-badge">CLEAR</span></button>
+            </div>
+            <!-- 画像表示用のコンテナ -->
+            <div id="imageContainer">
+                <img id="menuImage" src="/static/img/battle_image.png" alt="Menu Image">
+            </div>            
+        </div>
+        <!-- 隠しトグルスイッチ -->
+        <div id="secretToggle" style="display: none; margin-top: 20px; text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <span style="margin-right: 10px; font-size: 20px;">
+                    AIをダンジョンに連れていく:
+                </span>
+                <label class="switch">
+                    <input type="checkbox" id="secretAISwitch" onchange="toggleImage()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>  
+        <div id="gameContainer" style="display: none;">
+            <!-- キャラクター画像表示用のコンテナ -->
+            <div id="characterContainer">
+                <img id="yusyaImage" src="/static/img/yusya.png" alt="勇者" style="float: left;">
+                <img id="enemyImage" src="" alt="敵" style="float: right;"> <!-- 初期状態ではスライムを表示 -->
+            </div>
+            <div class="board-container">
+              <div id="board" class="board"></div>
+            </div>
+            <button id="backToMenuButton">メニューに戻る</button>
+        </div>
+        <script src="static/js/game.js"></script>
+        <script>
+            // トグルスイッチの状態に応じて画像を切り替える関数
+            function toggleImage() {
+                var image = document.getElementById('menuImage');
+                if (document.getElementById('secretAISwitch').checked) {
+                    image.src = '/static/img/battle_image_with_ai.png'; // トグルオンの画像
+                } else {
+                    image.src = '/static/img/battle_image.png'; // トグルオフの画像
+                }
+            }
+        </script>        
+    </body>
+</html>

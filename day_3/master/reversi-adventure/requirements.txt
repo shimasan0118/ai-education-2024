@@ -1,0 +1,9 @@
+Flask
+Flask-Cors
+tensorflow
+Cython
+matplotlib
+ipython
+creversi
+gunicorn
+numpy==1.23.5
