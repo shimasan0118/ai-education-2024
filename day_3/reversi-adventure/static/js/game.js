@@ -129,7 +129,6 @@ function updateBoard(boardString, finish=false, checkPass=true) {
 }
 
 function makeMove(x, y) {
-    alertThisTurn = false
     const isValidMove = validMoves.some(move => move[0] === x && move[1] === y);
 
     if (!isValidMove) {
@@ -144,6 +143,7 @@ function makeMove(x, y) {
     })
     .then(response => response.json())
     .then(data => {
+        alertThisTurn = false        
         updateBoard(data.board);       
         if (data.current_player === 'black' && secretAISwitch.checked) {
             getRecommendedMove(); // 黒番プレイヤーの場合にレコメンド機能を呼び出す
@@ -177,10 +177,10 @@ function highlightMove(move) {
 let lastCpuMove = [];  // CPUの最後の手の位置を保持する変数
 
 function cpuMove() {
-    alertThisTurn = false
     fetch(`${apiUrl}/cpu_move`)
         .then(response => response.json())
         .then(data => {
+            alertThisTurn = false        
             lastCpuMove = data.cpu_move;
             if (data.cpu_move.length > 0) {
                 updateBoard(data.board);
