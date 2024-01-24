@@ -38,9 +38,12 @@ class Webcam {
       // Crop the image so we're using the center square of the rectangular
       // webcam.
       const croppedImage = this.cropImage(webcamImage)
+      
+      // Resize the cropped image to [48, 48]
+    　const resizedImage = tf.image.resizeBilinear(croppedImage, [48, 48]);
 
       // Expand the outer most dimension so we have a batch size of 1.
-      const batchedImage = croppedImage.expandDims(0)
+      const batchedImage = resizedImage.expandDims(0)
 
       // Normalize the image between -1 and 1. The image comes in between 0-255,
       // so we divide by 127 and subtract 1.
