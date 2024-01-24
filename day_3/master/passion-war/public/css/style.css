@@ -34,7 +34,7 @@ a:hover{outline: 0;text-decoration: none;color: inherit;}
 #webcam{
   position: absolute;
   top: 0px;
-  right: 0px;
+  left: -45px;
   display: block;
   max-width: 380px;    
   margin: 0 auto;
@@ -111,7 +111,7 @@ a:hover{outline: 0;text-decoration: none;color: inherit;}
   top: -20px;
   left: 0px;
   width: 360px;
-  height: 340px;
+  height: 350px;
   background-size: 97%;
   background-image: url('../images/camera-bg.png');
 }
@@ -124,10 +124,10 @@ a:hover{outline: 0;text-decoration: none;color: inherit;}
 }
 .step-02 .video-feed .remote-frame{
   position: absolute;
-  top: 30px;
+  top: 21px;
   right: 13px;
-  width: 300px;
-  height: 400px;
+  width: 267px;
+  height: 280px;
   overflow: hidden;
 }
 
