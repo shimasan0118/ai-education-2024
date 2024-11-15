@@ -1,4 +1,4 @@
-runtime: nodejs12   # 使用する Node.js のバージョン
+runtime: nodejs18   # 使用する Node.js のバージョン
 env: standard       # 環境を標準環境に設定
 service: ai-education-dinosor-dash
 
