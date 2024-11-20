@@ -1,9 +1,9 @@
-Flask
-Flask-Cors
-tensorflow
-Cython
+Flask==3.0.1
+Flask-Cors==4.0.0
+tensorflow==2.14.0
+Cython==3.0.5
 matplotlib
-ipython
-creversi
+ipython==8.17.2
+creversi==0.0.1
 gunicorn
 numpy==1.23.5
