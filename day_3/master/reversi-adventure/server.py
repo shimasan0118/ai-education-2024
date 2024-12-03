@@ -21,7 +21,8 @@ class MyEvaluator(reversi.strategies.common.AbstractEvaluator):
         )
         return score
 
-model = keras.models.load_model('models/model_1126.h5')
+model = keras.models.load_model("models/model_0220.h5")
+
 # AIが予測を返す部分を高速化させます
 lmodel = utils.LiteModel.from_keras_model(model)
 

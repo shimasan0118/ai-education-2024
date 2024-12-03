@@ -1,4 +1,4 @@
-runtime: nodejs14 # またはサポートされている他のバージョン
+runtime: nodejs18 # またはサポートされている他のバージョン
 env: standard
 
 handlers:

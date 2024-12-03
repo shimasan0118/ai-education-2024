@@ -1,4 +1,4 @@
-runtime: nodejs14  # Node.jsのバージョンを指定
+runtime: nodejs18  # Node.jsのバージョンを指定
 env: standard      # 環境を標準環境に設定
 service: ai-education-speed-sketch-dash
 
