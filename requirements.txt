@@ -1,0 +1,14 @@
+onnxruntime
+torch
+packaging==22
+japanize_matplotlib
+gradio==3.50.0
+pydot
+typing_extensions
+sqlalchemy
+pymysql
+google-cloud-storage
+datasets
+torch
+reversi
+creversi
