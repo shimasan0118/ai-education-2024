@@ -12,3 +12,4 @@ datasets
 torch
 reversi
 creversi
+numpy==1.23.5
