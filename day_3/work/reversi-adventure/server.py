@@ -21,7 +21,7 @@ class MyEvaluator(reversi.strategies.common.AbstractEvaluator):
         )
         return score
 
-model = keras.models.load_model('models/model_1126.h5')
+model = keras.models.load_model('models/model_0220.h5')
 # AIが予測を返す部分を高速化させます
 lmodel = utils.LiteModel.from_keras_model(model)
 
@@ -114,6 +114,7 @@ def game_result():
     if not game.check_game_over():
         return jsonify({"error": "Game is not over"}), 400
     result, diff = game.get_game_result()
+    print(diff)
     return jsonify({"result": result, "board": game.get_board_str(), "diff": diff})
 
 if __name__ == '__main__':

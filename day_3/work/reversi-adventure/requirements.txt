@@ -1,6 +1,6 @@
 Flask
 Flask-Cors
-tensorflow
+tensorflow==2.14
 Cython
 matplotlib
 ipython

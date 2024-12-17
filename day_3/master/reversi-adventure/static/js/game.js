@@ -7,6 +7,7 @@ const cpuSelection = document.getElementById('cpuSelection');
 const vsSlimeButton = document.getElementById('vsSlimeButton');
 const vsDragonButton = document.getElementById('vsDragonButton');
 const vsDemonKingButton = document.getElementById('vsDemonKingButton');
+const vsAIButton = document.getElementById('vsAIButton');
 const menu = document.getElementById('menu');
 const gameContainer = document.getElementById('gameContainer');
 const backToMenuButton = document.getElementById('backToMenuButton');
@@ -18,6 +19,7 @@ dungeonButton.addEventListener('click', showCpuSelection);
 vsSlimeButton.addEventListener('click', () => startGame('slime'));
 vsDragonButton.addEventListener('click', () => startGame('dragon'));
 vsMaouButton.addEventListener('click', () => startGame('maou'));
+vsAIButton.addEventListener('click', () => startGame('AI'));
 backToMenuButton.addEventListener('click', () => {
     gameContainer.style.display = 'none';
     menu.style.display = 'block';
@@ -53,6 +55,14 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+function disableBoard() {
+    boardElement.classList.add('no-click');
+}
+
+function enableBoard() {
+    boardElement.classList.remove('no-click');
+}
+
 function showCpuSelection() {
     cpuSelection.style.display = 'block';
 }
@@ -79,6 +89,10 @@ function startGame(cpuStrategy = '') {
         enemyImage.src = '/static/img/maou.png';
         enemyImage.style.display = 'block'; // 要素を表示する
         enemyImage.classList.add('maou');
+    } else if (cpuStrategy === 'AI') {
+        enemyImage.src = '/static/img/ai2.png'; // AI用のアイコンを設定
+        enemyImage.style.display = 'block';
+        enemyImage.classList.add('ai');
     }    
     cpu = cpuStrategy;
     gameIsOver = false;
@@ -95,7 +109,7 @@ function startGame(cpuStrategy = '') {
         updateBoard(data.board);     
         if (data.current_player === 'black' && secretAISwitch.checked) {
             getRecommendedMove();
-        } 
+        }
         // cpuMove(); もしCPUを先手にしたい場合は、getValidMovesではなくcpuMoveを呼び出す必要がある
     })
     .catch(error => console.error('Error:', error));
@@ -143,15 +157,40 @@ function makeMove(x, y) {
     })
     .then(response => response.json())
     .then(data => {
-        alertThisTurn = false        
-        updateBoard(data.board);       
+        alertThisTurn = false
+        updateBoard(data.board);
+        console.log("hoge")
+        console.log(cpu)
+        console.log(data.current_player)
         if (data.current_player === 'black' && secretAISwitch.checked) {
             getRecommendedMove(); // 黒番プレイヤーの場合にレコメンド機能を呼び出す
+        } else if (data.current_player === 'white' && cpu === 'AI') {
+            cpuMoveAI(); // AIの手番処理
         } else if (data.current_player === 'white' && data.is_cpu_player) {
             cpuMove(); // 白番CPUの場合にCPUの手を実行
         }
     })
     .catch(error => console.error('Error:', error));
+}
+
+function cpuMoveAI() {
+    disableBoard(); // 盤面をクリック不可にする    
+    
+    fetch(`${apiUrl}/recommend`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.move && data.board === currentBoard) {
+                lastCpuMove = data.move;
+                makeMove(data.move[0], data.move[1]); // 得た座標でmakeMoveを呼び出す
+            }
+        })
+        .finally(() => {
+            enableBoard(); // AIの動作完了後にクリックを再度有効化する
+        })    
+        .catch(error => {
+            console.error('Error:', error);
+            enableBoard(); // エラー時にも盤面を有効化する
+        });
 }
 
 function getRecommendedMove() {
@@ -162,7 +201,9 @@ function getRecommendedMove() {
                 highlightMove(data.move);
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 // レコメンドされた手をハイライトする関数
@@ -180,7 +221,7 @@ function cpuMove() {
     fetch(`${apiUrl}/cpu_move`)
         .then(response => response.json())
         .then(data => {
-            alertThisTurn = false        
+            alertThisTurn = false
             lastCpuMove = data.cpu_move;
             if (data.cpu_move.length > 0) {
                 updateBoard(data.board);
@@ -203,17 +244,27 @@ function getValidMoves(checkPass=true) {
                     .then(resultData => {
                         if (!gameIsOver){
                             if (resultData.result === "Black WIN!"){
-                                alert(`${resultData.diff}石差で勇者の勝利です！`);
+                                setTimeout(() => {
+                                    alert(`${resultData.diff}石差で勇者の勝利です！`);
+                                }, 200); // 200ms 後にアラートを表示
                             }
                             else if (resultData.result === "White WIN!"){
-                                alert(`${resultData.diff}石差で敗北です...`);
+                                setTimeout(() => {                                
+                                    alert(`${resultData.diff}石差で敗北です...`);
+                                }, 200); // 200ms 後にアラートを表示                                    
                             }
                             else{
-                                alert(`引き分けです`);
+                                setTimeout(() => {                                
+                                    alert(`引き分けです`);
+                                }, 200); // 200ms 後にアラートを表示                                     
                             }
                             gameIsOver= true;
-                            if (resultData.result === "Black WIN!" && cpu !== '') {
-                                localStorage.setItem(`stageCleared_${cpu}`, true);
+                            if (resultData.result === "Black WIN!") {
+                                if (cpu === 'AI') {
+                                    localStorage.setItem('stageCleared_AI', true); // AIクリア状態を保存
+                                } else if (cpu !== '') {
+                                    localStorage.setItem(`stageCleared_${cpu}`, true); // 通常ステージのクリア
+                                }
                                 updateStageButtons();
                                 // 敵の画像を傾ける
                                 enemyImage.classList.add('rotate-45deg');                           
@@ -233,7 +284,9 @@ function getValidMoves(checkPass=true) {
                 // 有効な手がない場合はパス
                 if (data.valid_moves.length === 0) {
                     if (!alertThisTurn){
-                        alert(`${data.current_player === 'black' ? '黒' : '白'}番には有効な手がありません。`);
+                        setTimeout(() => {
+                            alert(`${data.current_player === 'black' ? '黒' : '白'}番には有効な手がありません。`);
+                        }, 200); // 200ms 後にアラートを表示                              
                     }
                     alertThisTurn = true
                     if (checkPass){
@@ -301,7 +354,10 @@ function highlightValidMoves(newValidMoves) {
 }
 
 function updateStageButtons() {
-    ['slime', 'dragon', 'maou'].forEach(stage => {
+    const stages = ['slime', 'dragon', 'maou'];
+    let allStagesCleared = true;
+    
+    stages.forEach(stage => {
         const isCleared = localStorage.getItem(`stageCleared_${stage}`);
         const button = document.getElementById(`vs${stage.charAt(0).toUpperCase() + stage.slice(1)}Button`);
         const clearBadge = button.querySelector('.clear-badge');
@@ -311,8 +367,28 @@ function updateStageButtons() {
         } else {
             clearBadge.style.display = 'none';
             button.classList.remove('button-cleared');
+            allStagesCleared = false;
         }
     });
+
+    // AIボタンの表示（すべてのステージがクリアされたら）
+    const aiButtonContainer = document.getElementById('aiButtonContainer');
+    if (allStagesCleared) {
+        aiButtonContainer.style.display = 'block';
+    }
+
+    // AIクリア状態の確認
+    const aiCleared = localStorage.getItem('stageCleared_AI');
+    const aiButton = document.getElementById('vsAIButton');
+    const aiClearBadge = aiButton.querySelector('.clear-badge');
+
+    if (aiCleared) {
+        aiClearBadge.style.display = 'block'; // AIのCLEARバッジを表示
+        aiButton.classList.add('button-cleared'); // AIボタンのクリア状態スタイル
+    } else {
+        aiClearBadge.style.display = 'none';
+        aiButton.classList.remove('button-cleared');
+    }
 }
 
 // ページ読み込み時にボタンの状態を更新
