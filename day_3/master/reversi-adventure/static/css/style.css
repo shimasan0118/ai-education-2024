@@ -276,6 +276,14 @@ input:checked + .slider:before {;
     left: calc(50% + 30px); /* 中央から少し右に配置 */    
 }
 
+.ai {
+    width: 100px; /* 画像の幅 */
+    height: 100px; /* 画像の高さ */
+    object-fit: contain;
+    position: absolute; /* 絶対位置指定 */
+    left: calc(50% + 100px); /* 中央から少し右に配置 */  
+}
+
 
 #yusyaImage {
     position: absolute; /* 絶対位置指定 */
@@ -299,4 +307,47 @@ input:checked + .slider:before {;
 /* 傾けるクラス */
 .rotate-315deg {
     transform: rotate(315deg);
+}
+
+.no-click {
+    pointer-events: none; /* クリックイベントを無効化 */
+    opacity: 0.6; /* 視覚的に無効化されたことを示す */
+}
+
+/* AIボタンのスタイル */
+button.ai-button {
+    background-color: #4A90E2; /* 青系の背景色 */
+    color: #fff;
+    border: none;
+    font-size: 17px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 5px;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+button.ai-button:hover {
+    background-color: #357ABD; /* ホバー時の色 */
+}
+
+/* AIボタンのCLEARバッジ */
+button.ai-button .clear-badge {
+    display: none; /* 初期状態では非表示 */
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background-color: gold;
+    font-size: 12px;
+    padding: 3px;
+    font-weight: bold; /* 文字を太字にする */
+    border-radius: 5px;
+    z-index: 1;
+}
+
+#aiButtonContainer {
+    display: none
+    margin-top: 10px;
 }
