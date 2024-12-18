@@ -129,7 +129,9 @@ function updateBoard(boardString, finish=false, checkPass=true) {
 }
 
 function makeMove(x, y) {
-    const isValidMove = validMoves.some(move => move[0] === x && move[1] === y);
+    setTimeout(() => {
+      const isValidMove = validMoves.some(move => move[0] === x && move[1] === y);
+    }, 100);
 
     if (!isValidMove) {
         console.log("Invalid move");
