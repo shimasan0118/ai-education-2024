@@ -148,7 +148,6 @@ function makeMove(x, y) {
     }, 100);
 
     if (!isValidMove) {
-        console.log("Invalid move");
         return; // 有効な手でない場合は何もしない
     }
 
@@ -161,9 +160,6 @@ function makeMove(x, y) {
     .then(data => {
         alertThisTurn = false
         updateBoard(data.board);
-        console.log("hoge")
-        console.log(cpu)
-        console.log(data.current_player)
         if (data.current_player === 'black' && secretAISwitch.checked) {
             getRecommendedMove(); // 黒番プレイヤーの場合にレコメンド機能を呼び出す
         } else if (data.current_player === 'white' && cpu === 'AI') {
