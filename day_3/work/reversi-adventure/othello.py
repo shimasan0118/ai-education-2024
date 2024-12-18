@@ -28,9 +28,19 @@ class OthelloGame:
             self.cpu_black_player = reversi.Player('black', black_cpu_dict["name"], black_cpu_dict["strategy"])
         if white_cpu_dict:
             self.cpu_white_player = reversi.Player('white', white_cpu_dict["name"], white_cpu_dict["strategy"])       
-        self.recommend_strategy = reversi.strategies._NegaScout(
+        ai_strategy = reversi.strategies.Usagi(base=reversi.strategies._NegaScout(
             depth = 6, # 6手先まで読む
             evaluator = evaluator()
+        ))
+        self.recommend_strategy = reversi.strategies.Switch(
+            turns=[
+                47,
+                60             # (残り16手)からは完全読み
+            ],
+            strategies=[
+                ai_strategy,
+                reversi.strategies._EndGame()
+            ],
         )
             
     def initialize_board(self):
