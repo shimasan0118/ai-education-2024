@@ -66,11 +66,17 @@ button {
   padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
 button:hover {
-  background-color: lighten(#2096ba, 20%);
+  background-color: #167b96; /* 色を薄くする代わりに実際の色コードを使う */
+}
+
+button:disabled {
+  background-color: #aaa; /* 無効化されたボタンの背景色 */
+  cursor: not-allowed; /* 無効化されたときにカーソルが'禁止'のマークになるように設定 */
+  opacity: 0.6; /* 無効化されたときに少し透明にする */
 }
 
 .button-container {
@@ -88,7 +94,13 @@ button:hover {
 }
 
 .game-container {
-  margin: 20px 0;
+  margin: auto; /* 上下左右を自動で配置する */
+  padding: 20px; /* ボックス内のコンテンツとボーダーの間に余白を追加 */
+  display: flex; /* フレックスボックスを使用 */
+  flex-direction: column; /* アイテムを縦に配置 */
+  justify-content: center; /* 垂直方向の中央揃え */
+  align-items: center; /* 水平方向の中央揃え */
+  min-height: 50vh; /* 高さを指定して少し下げる */
 }
 
 .camera-setup {

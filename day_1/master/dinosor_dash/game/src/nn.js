@@ -1,3 +1,4 @@
+// -*- coding: utf-8 -*-
 import 'babel-polyfill';
 import * as tf from '@tensorflow/tfjs';
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from './game/constants';
@@ -205,8 +206,10 @@ function setup() {
   window.runner = runner;
   // Initialize everything in the game and start the game.
   runner.init();
+  
+  // Disable the start button after the first click
+  START_BUTTON.disabled = true;
 }
-// variable which tells whether thethe game is being loaded for the first time i.e. not a reset
 
 
 function handleReset(dinos) {
