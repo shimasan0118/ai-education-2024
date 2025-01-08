@@ -1,3 +1,4 @@
+// -*- coding: utf-8 -*-
 // Represents a single match. Updates and keeps the game state. Draws to a canvas.
 
 import { sleep } from './util';
@@ -412,10 +413,13 @@ export default class Match {
       this.ball.speed = this.ballSpeed;        
       // ボールをリセット
       this.resetBall();
+        
       // スコアリミットに到達してなければマッチを終了させないために、winnerをnullにする
       if (this.leftScore < this.scoreLimit && this.rightScore < this.scoreLimit) { 
         if (this.battleMode){
-            this.winner = null;
+          // 0.3秒待機
+           await this.waitForSecond();            
+          this.winner = null;
         }
       }
       else {
@@ -431,6 +435,14 @@ export default class Match {
     this.currentFrame += 1;
   }
 
+  waitForSecond() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve();
+      }, 300);
+    });
+  }    
+
   // Given an object with coordinates and size, draw it to the canvas
   drawObject(obj) {
     const width = obj.width * this.canvas.width;
@@ -439,6 +451,22 @@ export default class Match {
     const y = obj.y * this.canvas.height - height / 2;
     this.ctx.fillRect(x, y, width, height);
   }
+
+  // Matchクラス内に追加
+  checkCompletion() {
+    const allDefeated = Array.from(document.querySelectorAll('#defeatList li span.defeated')).length === 5;
+
+    if (allDefeated) {
+      const popup = document.getElementById('popup');
+      popup.classList.add('active');
+
+      const closeButton = document.getElementById('popupCloseButton');
+      closeButton.addEventListener('click', () => {
+        popup.classList.remove('active');
+      });
+    }
+  }
+    
     
   // 討伐リストを更新するメソッド
   updateDefeatList() {
@@ -452,15 +480,24 @@ export default class Match {
     } else if (this.matchCount <= 200) {
       enemyId = 'dragon';        
     } else {
-      enemyId = 'devilMaster';
+      enemyId = 'devil';
     }
 
     const enemyElement = document.getElementById(enemyId);
     if (enemyElement) {
       const enemyName = enemyElement.textContent.split(':')[0];
-      enemyElement.innerHTML = `${enemyName}: <span class="defeated">討伐！</span>`;
+      const content = enemyElement.innerHTML;
+      enemyElement.innerHTML = content.replace('未討伐', '<span class="defeated">討伐！</span>');
+      enemyElement.classList.add('defeated');
+      
+      // 討伐状況をlocalStorageに保存
+      const savedStatus = JSON.parse(localStorage.getItem('defeatStatus')) || {};
+      savedStatus[enemyId] = '討伐！';
+      localStorage.setItem('defeatStatus', JSON.stringify(savedStatus));        
     }
-  }    
+    // 討伐リスト更新後にクリアチェックを実行
+    this.checkCompletion();      
+  } 
 
   // Redraw the game based on the current state
   async draw() {
@@ -523,7 +560,7 @@ export default class Match {
         this.stats && this.stats.onFrame(this.currentFrame * this.updateFrequency),
       ]);
     }
-  } 
+  }    
 
   // Starts the game and runs until completion.
   async run() {

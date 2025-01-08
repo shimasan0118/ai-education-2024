@@ -4,6 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hannari&display=swap" rel="stylesheet">    
   <title>Pong RL</title>
   <meta name="description" content="Reinforcement Learning with Pong in the Browser via TensorFlow.js">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,7 +31,7 @@
   <![endif]-->
 
   <div id="title">
-    <h1 class="title is-3">PONG RL</h1>
+    <h1 class="title is-3">PONG BATTLE RL</h1>
   </div>
 
   <section class="animated section" id="menu">
@@ -109,11 +111,31 @@
           <div class="column has-text-centered">
             <h2 class="title is-4">WANTED</h2>
             <ul>
-              <li id="slime">スライム: 0~50戦 未討伐</li>
-              <li id="skeleton">スカル: 51~100戦 未討伐</li>
-              <li id="goblin">ゴブリン: 101~150戦 未討伐</li>                
-              <li id="dragon">ドラゴン: 151~200戦 未討伐</li>
-              <li id="devil">デビル: 201戦~ 未討伐</li>
+              <li id="slime">
+                0~50戦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                <img src="slime.png" alt="スライム" class="monster-icon">
+                未討伐
+              </li>
+              <li id="skeleton">
+                51~100戦&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                <img src="skeleton.png" alt="スケルトン" class="monster-icon">
+                未討伐
+              </li>
+              <li id="goblin">
+                101~150戦&nbsp;&nbsp;: 
+                <img src="goblin.png" alt="ゴブリン" class="monster-icon">
+                未討伐
+              </li>
+              <li id="dragon">
+                151~200戦&nbsp;&nbsp;:&nbsp;
+                <img src="dragon.png" alt="ドラゴン" class="monster-icon">
+                未討伐
+              </li>
+              <li id="devil">
+                201戦~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                <img src="devil.png" alt="デビル" class="monster-icon">
+                未討伐
+              </li>
             </ul>
           </div>
         </div>
@@ -169,6 +191,11 @@
       </div>
     </div>    
   </section>
+  <div id="popup">
+    <h2>🎉 Congratulations! 🎉</h2>
+    <p>すべての敵を討伐しました！</p>
+    <button id="popupCloseButton" class="button is-primary">閉じる</button>
+  </div>  
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="js/main.js"></script>
 </body>

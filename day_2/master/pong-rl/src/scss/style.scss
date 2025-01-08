@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Play:400,700');
 
 // Set your brand colors
-$black: #3a3c3f;
-$white: #e5e5e6;
-$blue: #2ec0f9;
-$red: #f06543;
-$yellow: #e7e247;
-$green: #c5d86d;
+$black: #2a2a2a;
+$white: #f5f5f5;
+$blue-light: #4a90e2; // 明るい青
+$blue-dark: #003f7d;  // 暗い青
+$grey-light: #f4f4f4; // 明るいグレー
+$grey-dark: #8a8a8a;  // 暗いグレー
+$accent: #68c1ff;     // アクセントカラー
 
 $grey-darker: mix($white, $black, 21%);
 $grey-dark: mix($white, $black, 29%);
@@ -16,17 +17,16 @@ $grey-lighter: mix($white, $black, 86%);
 
 // Update Bulma's variables
 $family-sans-serif: 'Play', sans-serif;
-$primary: $red;
-$background: $black;
-$text: $white;
-$info: $blue;
-$link: $red;
-$link-hover: darken($red, 10%);
-$link-focus: darken($red, 10%);
-$link-active: darken($red, 10%);
-$title-color: $white;
-$title-weight: 400;
-$input-hover-color: darken($red, 10%);
+$primary: $blue-light;
+$background: $white;
+$text: $black;
+$info: $blue-light;
+$link: $blue-light;
+$link-hover: lighten($blue-light, 15%);
+$link-focus: darken($blue-light, 10%);
+$title-color: $blue-dark;
+$title-weight: 700;
+$input-hover-color: lighten($blue-light, 15%);
 
 // Import the rest of Bulma
 @import 'node_modules/bulma/bulma.sass';
@@ -35,10 +35,10 @@ html,
 body {
   height: 100%;
   width: 100%;
-  background-color: $black;
+  background-color: $background;
   margin: 0;
   padding: 0;
-  color: $white;
+  color: $text;
   overflow: hidden;
 }
 
@@ -46,6 +46,14 @@ body {
   width: 100%;
   text-align: center;
   margin-bottom: 1rem;
+}
+
+#title h1 {
+  font-size: 60px;
+  font-weight: bold; /* 太字で強調 */
+  text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); /* 軽い影で立体感 */
+  margin-top: 20px; 
+  margin-bottom: 20px; 
 }
 
 #footer {
@@ -58,9 +66,82 @@ body {
 }
 
 #gameCanvas {
-  border: 1px $white solid;
-  border-radius: 5px;
-  padding: 5px;
+  border: 3px solid $blue-dark; // 明るい青で枠を強調
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+#startBattleButton {
+  background-color: $blue-light;
+  color: $white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-top: 10px; /* ボタン上部の余白 */    
+  box-shadow: 0px 4px $grey-dark;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: lighten($blue-light, 10%);
+    box-shadow: 0px 2px $grey-dark;
+    transform: translateY(2px);
+  }
+
+  &:active {
+    background-color: darken($blue-light, 10%);
+    box-shadow: 0px 0px $grey-dark;
+    transform: translateY(4px);
+  }
+}
+
+#popup {
+  display: none; // 初期状態は非表示
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $blue-dark; // 背景色：暗い青
+  color: $white; // 文字色：白
+  padding: 20px; // 内側の余白
+  border-radius: 10px; // 角丸
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5); // 立体感を出す影
+  z-index: 1000; // 他の要素よりも前面に表示
+  text-align: center; // 中央揃え
+
+  h2 {
+    font-size: 24px; // タイトルサイズ
+    font-weight: bold;
+    color: $accent; // アクセントカラー
+    margin-bottom: 15px;
+  }
+
+  p {
+    font-size: 18px; // 説明文サイズ
+    margin-bottom: 20px;
+  }
+
+  button {
+    background-color: $blue-light; // 明るい青
+    color: $white; // 文字色：白
+    font-weight: bold;
+    border: none; // 枠線をなしに
+    border-radius: 8px; // 角丸
+    padding: 10px 20px; // ボタンの内側余白
+    cursor: pointer; // マウスカーソル変更
+    transition: all 0.2s ease; // なめらかなアニメーション
+
+    &:hover {
+      background-color: lighten($blue-light, 10%); // ホバー時に明るく
+    }
+
+    &:active {
+      background-color: darken($blue-light, 10%); // クリック時に暗く
+    }
+  }
+}
+
+#popup.active {
+  display: block; // 表示状態
 }
 
 .section {
@@ -148,29 +229,51 @@ body {
 
 
 #defeatList {
-  background-color: $grey-dark; // 背景色はお好みで変更可能
-  color: $white;
-  padding: 20px;
-  border-radius: 5px;
+  background: #cfcfcf;
+  background-size: cover;
+  border: none; // 枠線なし
+  padding: 20px 20px 30px;
+  width: 90%;
+  margin: 0 auto; /* 横中央に配置 */    
+  box-shadow: 
+    0px 4px 10px rgba(0, 0, 0, 0.6);
+  position: relative;
+  text-align: center;
 
   ul {
     list-style-type: none;
     padding: 0;
+    margin-top: 30px;
 
     li {
-      margin-bottom: 10px;
-      font-size: 16px;
+      margin-bottom: 15px;
+      font-size: 22px; // 少し大きめのサイズ
+      font-weight: normal; // フォント自体が太めなので通常の太さに
+      color: $black;
+
+      &.defeated {
+        font-weight: bold;
+        color: #d32f2f; // 深みのある赤色
+      }
     }
   }
 
   h2 {
+    font-size: 48px; // タイトル文字のサイズ
     font-weight: bold;
-    font-size: 30px;      
-    color: $red; // タイトルの色を目立たせる
+    color: #4f4f4f; // タイトルを目立たせる茶色
+    text-shadow: 
+      0px 2px 4px rgba(0, 0, 0, 0.3), 
+      0px 4px 6px rgba(255, 255, 255, 0.2); // 軽い光沢
+    margin-bottom: 20px;
   }
 }
 
-.defeated {
-  font-weight: bold;
-  color: $red;
+.monster-icon {
+  display: inline-block; /* インライン要素として扱う */
+  width: 40px; /* 幅 */
+  height: 40px; /* 高さ */
+  margin-right: 10px; /* テキストとの間隔 */
+  vertical-align: middle; /* テキストの中央に揃える */
+  object-fit: contain; /* 画像を枠内にフィット */
 }

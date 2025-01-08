@@ -1,7 +1,202 @@
-<!doctype html><html class="no-js"><head><meta charset="utf-8"><meta http-equiv="x-ua-compatible" content="ie=edge"><title>Pong RL</title><meta name="description" content="Reinforcement Learning with Pong in the Browser via TensorFlow.js"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-63484688-1"></script><script>function a(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],a("js",new Date),a("config","UA-63484688-1");</script><link rel="stylesheet" href="main.4b9d83ef.css"></head><body> <!--[if IE]>
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hannari&display=swap" rel="stylesheet">    
+  <title>Pong RL</title>
+  <meta name="description" content="Reinforcement Learning with Pong in the Browser via TensorFlow.js">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-63484688-1"></script>
+  <script>window.dataLayer = window.dataLayer || [];
+function gtag() {
+  dataLayer.push(arguments);
+}
+gtag('js', new Date());
+gtag('config', 'UA-63484688-1');</script>
+<link rel="stylesheet" href="/main.fb6bbcaf.css"></head>
+
+<body>
+  <!--[if IE]>
     <p class="browserupgrade">
       You are using an <strong>outdated</strong> browser. Please
       <a href="https://browsehappy.com/">upgrade your browser</a> to improve
       your experience and security.
     </p>
-  <![endif]--> <div id="title"> <h1 class="is-3 title">PONG RL</h1> </div> <section class="animated section" id="menu"> <div class="container"> <div class="field"> <div class="columns is-gapless is-vcentered"> <div class="column is-one-third"> Player A: </div> <div class="column control has-text-right"> <div class="is-loading is-medium player select"> <select id="playerADropdown"> {{!-- Will be filled via JS --}} </select> </div> </div> </div> </div> <div class="field"> <div class="columns is-gapless is-vcentered"> <div class="column is-one-third"> セルフプレイ: </div> <div class="column control has-text-right"> <div class="is-medium select"> <select id="selfPlayDropdown"> <option>Yes</option> <option>No</option> </select> </div> </div> </div> </div> <div class="field"> <div class="columns is-gapless is-vcentered"> <div class="column is-one-third"> Player B: </div> <div class="column control has-text-right"> <div class="is-loading is-medium player select"> <select id="playerBDropdown"> {{!-- Will be filled via JS --}} </select> </div> </div> </div> </div> <div class="field"> <div class="columns is-gapless is-vcentered"> <div class="column is-one-third"> 難易度: </div> <div class="column control has-text-right"> <div class="is-medium select"> <select id="difficultyDropdown"> <option>かんたん</option> <option>ふつう</option> <option>むずかしい</option> </select> </div> </div> </div> </div> <div class="field"> <div class="columns is-gapless is-vcentered"> <div class="column has-text-centered"> <button id="playButton" class="button is-large is-loading is-primary">Play</button> </div> </div> </div> </div> </section> <div class="container"> <section class="animated section" id="defeatList"> <div class="container"> <div class="columns"> <div class="column has-text-centered"> <h2 class="is-4 title">WANTED</h2> <ul> <li id="slime">スライム: 0~50戦 未討伐</li> <li id="skeleton">スカル: 51~100戦 未討伐</li> <li id="goblin">ゴブリン: 101~150戦 未討伐</li> <li id="dragon">ドラゴン: 151~200戦 未討伐</li> <li id="devil">デビル: 201戦~ 未討伐</li> </ul> </div> </div> </div> </section> </div> <section class="animated section" id="game"> <div class="container"> <div class="columns"> <div class="column has-text-centered"> <canvas id="gameCanvas" width="240" height="180"></canvas> <button id="startBattleButton" class="button is-primary">敵とバトル</button> </div> <div class="column" id="stats"> <div class="columns is-mobile"> <div class="column is-two-thirds"> 試合数 </div> <div class="column has-text-right stats-match"> 0 </div> </div> <div class="columns is-mobile"> <div class="column is-two-thirds"> タイム </div> <div class="column has-text-right stats-time"> 0.0s </div> </div> <div class="columns is-mobile"> <div class="column is-two-thirds"> 平均タイム </div> <div class="column has-text-right stats-match-duration"> 0.0s </div> </div> <div class="columns is-mobile"> <div class="column is-half"> ライブ学習 </div> <div class="column control has-text-right stats-live-mode"> <div class="is-medium select"> <select id="liveDropdown"> <option>Yes</option> <option>No</option> </select> </div> </div> </div> </div> </div> </div> </section> <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> <script src="main.e083995f.js"></script> </body></html>
+  <![endif]-->
+
+  <div id="title">
+    <h1 class="title is-3">PONG BATTLE RL</h1>
+  </div>
+
+  <section class="animated section" id="menu">
+    <div class="container">
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column is-one-third">
+            Player A:
+          </div>
+          <div class="column control has-text-right">
+            <div class="player select is-loading is-medium">
+              <select id="playerADropdown">
+                {{!-- Will be filled via JS --}}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column is-one-third">
+            セルフプレイ:
+          </div>
+          <div class="column control has-text-right">
+            <div class="select is-medium">
+              <select id="selfPlayDropdown">
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column is-one-third">
+            Player B:
+          </div>
+          <div class="column control has-text-right">
+            <div class="player select is-loading is-medium">
+              <select id="playerBDropdown">
+                {{!-- Will be filled via JS --}}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column is-one-third">
+            難易度:
+          </div>
+          <div class="column control has-text-right">
+            <div class="select is-medium">
+              <select id="difficultyDropdown">
+                <option>かんたん</option>
+                <option>ふつう</option>
+                <option>むずかしい</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column has-text-centered">
+            <button id="playButton" class="button is-primary is-large is-loading">Play</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container">
+    <section class="animated section" id="defeatList">
+      <div class="container">
+        <div class="columns">
+          <div class="column has-text-centered">
+            <h2 class="title is-4">WANTED</h2>
+            <ul>
+              <li id="slime">
+                0~50戦&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                <img src="/slime.9f779505.png" alt="スライム" class="monster-icon">
+                未討伐
+              </li>
+              <li id="skeleton">
+                51~100戦&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                <img src="/skeleton.652a17b1.png" alt="スケルトン" class="monster-icon">
+                未討伐
+              </li>
+              <li id="goblin">
+                101~150戦&nbsp;&nbsp;: 
+                <img src="/goblin.56b5b59c.png" alt="ゴブリン" class="monster-icon">
+                未討伐
+              </li>
+              <li id="dragon">
+                151~200戦&nbsp;&nbsp;:&nbsp;
+                <img src="/dragon.85489808.png" alt="ドラゴン" class="monster-icon">
+                未討伐
+              </li>
+              <li id="devil">
+                201戦~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;
+                <img src="/devil.1500e4ba.png" alt="デビル" class="monster-icon">
+                未討伐
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <section class="animated section" id="game">
+    <div class="container">
+      <div class="columns">
+        <div class="column has-text-centered">
+          <canvas id="gameCanvas" width="240" height="180"></canvas>
+          <button id="startBattleButton" class="button is-primary">敵とバトル</button>
+        </div>
+        <div class="column" id="stats">
+          <div class="columns is-mobile">
+            <div class="column is-two-thirds">
+              試合数
+            </div>
+            <div class="column has-text-right stats-match">
+              0
+            </div>
+          </div>
+          <div class="columns is-mobile">
+            <div class="column is-two-thirds">
+              タイム
+            </div>
+            <div class="column has-text-right stats-time">
+              0.0s
+            </div>
+          </div>
+          <div class="columns is-mobile">
+            <div class="column is-two-thirds">
+              平均タイム
+            </div>
+            <div class="column has-text-right stats-match-duration">
+              0.0s
+            </div>
+          </div>
+          <div class="columns is-mobile">
+            <div class="column is-half">
+              ライブ学習
+            </div>
+            <div class="column control has-text-right stats-live-mode">
+              <div class="select is-medium">
+                <select id="liveDropdown">
+                  <option>Yes</option>
+                  <option>No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>    
+  </section>
+  <div id="popup">
+    <h2>🎉 Congratulations! 🎉</h2>
+    <p>すべての敵を討伐しました！</p>
+    <button id="popupCloseButton" class="button is-primary">閉じる</button>
+  </div>  
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="/main.fb6bbcaf.js"></script>
+</body>
+
+</html>

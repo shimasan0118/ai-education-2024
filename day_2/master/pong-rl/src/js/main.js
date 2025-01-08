@@ -1,3 +1,4 @@
+// -*- coding: utf-8 -*-
 import '../scss/style.scss';
 
 import Menu from './menu';
@@ -19,6 +20,8 @@ const controllers = {
 let matchCount = 0;  // 試合数を追跡する変数
 
 $(document).ready(async () => {
+  // ページロード時に討伐状況を復元
+  restoreDefeatStatus();     
   Menu.init(controllers);
   const matchOptions = await Menu.run();
   let liveMode = true;
@@ -32,7 +35,7 @@ $(document).ready(async () => {
     startBattle();
   });
 
-  await sleep(500);
+  await sleep(500);   
   $('#menu').remove();
   $('#game').addClass('active');
   $('#defeatList').addClass('active');
@@ -92,5 +95,17 @@ function startBattle() {
       currentMatch.leftController = originalLeftController;
       currentMatch.BattleMode = false;
     });
+  }
+}
+
+function restoreDefeatStatus() {
+  const savedStatus = JSON.parse(localStorage.getItem('defeatStatus')) || {};
+  for (const [enemyId, status] of Object.entries(savedStatus)) {
+    const enemyElement = document.getElementById(enemyId);
+    if (enemyElement && status === '討伐！') {
+      const content = enemyElement.innerHTML;
+      enemyElement.innerHTML = content.replace('未討伐', '<span class="defeated">討伐！</span>');
+      enemyElement.classList.add('defeated');
+    }
   }
 }
