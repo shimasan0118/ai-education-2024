@@ -143,36 +143,34 @@ function updateBoard(boardString, finish=false, checkPass=true) {
 }
 
 function makeMove(x, y) {
-    setTimeout(() => {
-      const isValidMove = validMoves.some(move => move[0] === x && move[1] === y);
-    
-      if (!isValidMove) {
-          console.log("Invalid move");
-          return; // 有効な手でない場合は何もしない
-      }
+    const isValidMove = validMoves.some(move => move[0] === x && move[1] === y);
 
-      fetch(`${apiUrl}/move`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ x, y })
-      })
-      .then(response => response.json())
-      .then(data => {
-          alertThisTurn = false
-          updateBoard(data.board);
-          console.log("hoge")
-          console.log(cpu)
-          console.log(data.current_player)
-          if (data.current_player === 'black' && secretAISwitch.checked) {
-              getRecommendedMove(); // 黒番プレイヤーの場合にレコメンド機能を呼び出す
-          } else if (data.current_player === 'white' && cpu === 'AI') {
-              cpuMoveAI(); // AIの手番処理
-          } else if (data.current_player === 'white' && data.is_cpu_player) {
-              cpuMove(); // 白番CPUの場合にCPUの手を実行
-          }
-      })
-      .catch(error => console.error('Error:', error));
-    }, 50);        
+    if (!isValidMove) {
+        console.log("Invalid move");
+        return; // 有効な手でない場合は何もしない
+    }
+
+    fetch(`${apiUrl}/move`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ x, y })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alertThisTurn = false
+        updateBoard(data.board);
+        console.log("hoge")
+        console.log(cpu)
+        console.log(data.current_player)
+        if (data.current_player === 'black' && secretAISwitch.checked) {
+            getRecommendedMove(); // 黒番プレイヤーの場合にレコメンド機能を呼び出す
+        } else if (data.current_player === 'white' && cpu === 'AI') {
+            cpuMoveAI(); // AIの手番処理
+        } else if (data.current_player === 'white' && data.is_cpu_player) {
+            cpuMove(); // 白番CPUの場合にCPUの手を実行
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 function cpuMoveAI() {
